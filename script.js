@@ -47,6 +47,7 @@ btnScroll.addEventListener('click', () => {
 })
 // console.log(btnScroll.getBoundingClientRect());
 
+/* 
 // всплытие
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -82,3 +83,44 @@ link.addEventListener('click', function(e) {
   // e.stopPropagation()
 })
 
+*/
+
+// delegation 1 ver.
+// document.querySelectorAll('.nav__link').forEach(function(el){
+//   el.addEventListener('click', function(e){
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     console.log(id)
+//     document.querySelector(id).scrollIntoView({behavior: 'smooth'})
+//   })
+// })
+
+// 2 ver - main
+document.querySelector('.nav__links').addEventListener('click', function(e) {
+  e.preventDefault();
+  // console.log(e.target);
+  if(e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({behavior: 'smooth'});
+  }
+})
+
+// tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabContainer = document.querySelector('.operations__tab-container');
+const tabContent = document.querySelectorAll('.operations__content');
+
+tabContainer.addEventListener('click', function(e){
+  e.preventDefault();
+  const cliked = e.target.closest('.operations__tab'); // fixd span
+  // console.log(cliked);
+
+  if(!cliked) return
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'))
+  cliked.classList.add('operations__tab--active');
+
+  tabContent.forEach(content => content.classList.remove('operations__content--active'))
+  // console.log(cliked.dataset.tab);
+  document.querySelector(`.operations__content--${cliked.dataset.tab}`).classList.add('operations__content--active');
+  
+})
