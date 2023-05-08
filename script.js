@@ -217,3 +217,25 @@ allSections.forEach(function (section) {
   sectionsObserver.observe(section);
   section.classList.add('section--hidden');
 })
+
+// images - lazy load
+const images = document.querySelectorAll('img[data-src]');
+console.log(images); // NodeList(3) 
+
+
+function loading(entries, observer){
+  // console.log(entries);
+  if(!entries[0].isIntersecting) return;
+  entries[0].target.src = entries[0].target.dataset.src;
+  
+  entries[0].target.addEventListener('load', function() {
+    entries[0].target.classList.remove('lazy-img');
+  })
+  observer.unobserve(entries[0].target);
+}
+
+const imgObserver = new IntersectionObserver(loading, {thrashold: 0.15});
+
+images.forEach(img => {
+  imgObserver.observe(img)
+})
