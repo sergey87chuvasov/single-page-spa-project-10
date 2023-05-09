@@ -220,7 +220,7 @@ allSections.forEach(function (section) {
 
 // images - lazy load
 const images = document.querySelectorAll('img[data-src]');
-console.log(images); // NodeList(3) 
+// console.log(images); // NodeList(3) 
 
 
 function loading(entries, observer){
@@ -243,6 +243,7 @@ images.forEach(img => {
 // slider
 const slides = document.querySelectorAll('.slide');
 const slider = document.querySelector('.slider');
+const dotsContainer = document.querySelector('.dots');
 
 const btnRight = document.querySelector('.slider__btn--right');
 const btnLeft = document.querySelector('.slider__btn--left');
@@ -272,7 +273,8 @@ function nextSlide() {
     currSlide++;
   }
 
-  goToSlide(currSlide)
+  goToSlide(currSlide);
+  activateDots(currSlide);
 }
 
 function prevSlide() {
@@ -282,8 +284,51 @@ function prevSlide() {
     currSlide--;
   }
 
-  goToSlide(currSlide)
+  goToSlide(currSlide);
+  activateDots(currSlide);
 }
 
 btnRight.addEventListener('click', nextSlide);
-btnLeft.addEventListener('click', prevSlide)
+btnLeft.addEventListener('click', prevSlide);
+
+// slider + keyboard
+document.addEventListener('keydown', function(e) {
+  console.log(e)
+
+  if(e.key === 'ArrowLeft') {
+    prevSlide();
+  }
+
+  if(e.key === 'ArrowRight') {
+    nextSlide();
+  }
+})
+
+// slider dots
+function createDots() {
+  slides.forEach((_, i) => {
+    dotsContainer.insertAdjacentHTML('beforeend', `
+      <button class='dots__dot' data-slide=${i}></button>
+    `)
+  })
+}
+
+createDots();
+
+dotsContainer.addEventListener('click', function(e) {
+  if (e.target.classList.contains('dots__dot')){
+    // console.log('dot')
+    const slide = e.target.dataset.slide;
+    goToSlide(slide);
+    activateDots(slide);
+  }
+})
+
+function activateDots(slide){
+  document.querySelectorAll('.dots__dot').forEach(dot => {
+    dot.classList.remove("dots__dot--active");
+  })
+  document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active')
+}
+
+activateDots(0);
