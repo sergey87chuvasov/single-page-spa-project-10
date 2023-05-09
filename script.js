@@ -239,3 +239,51 @@ const imgObserver = new IntersectionObserver(loading, {thrashold: 0.15});
 images.forEach(img => {
   imgObserver.observe(img)
 })
+
+// slider
+const slides = document.querySelectorAll('.slide');
+const slider = document.querySelector('.slider');
+
+const btnRight = document.querySelector('.slider__btn--right');
+const btnLeft = document.querySelector('.slider__btn--left');
+
+let currSlide = 0;
+const maxSlides = slides.length;
+
+// slider.style.scale = 0.5;
+// slider.style.overflow = 'visible';
+
+// slides.forEach((slide, index) => {
+//   slide.style.transform = `translateX(${100 * index}%)`;
+// })
+
+function goToSlide(slide) {
+  slides.forEach((s, index) => {
+    s.style.transform = `translateX(${100 * (index - slide)}%)`;
+  })
+}
+
+goToSlide(0);
+
+function nextSlide() {
+  if (currSlide === maxSlides - 1) {
+    currSlide = 0
+  } else {
+    currSlide++;
+  }
+
+  goToSlide(currSlide)
+}
+
+function prevSlide() {
+  if(currSlide === 0) {
+    currSlide = maxSlides - 1;
+  } else {
+    currSlide--;
+  }
+
+  goToSlide(currSlide)
+}
+
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide)
